@@ -1,4 +1,4 @@
-# Rust Port Scanner
+# Port Scanner
 
 A simple, concurrent TCP port scanner written in Rust.  
 It scans ports 1–1024 on a specified target host using a 10‑worker thread pool and reports any open ports.
@@ -8,7 +8,7 @@ It scans ports 1–1024 on a specified target host using a 10‑worker thread po
 ## 🔍 Features
 
 -   Scans TCP ports 1–1024 by default
--   Uses 10 parallel worker threads for speed
+-   Use 10 parallel worker threads
 -   50ms timeout per port
 -   Prints open port as it’s discovered
 
@@ -23,21 +23,20 @@ It scans ports 1–1024 on a specified target host using a 10‑worker thread po
 
 ## 🛠️ Building & Running
 
-1. **Clone the repo**
+1. Clone the repo
+2. Navigate to the project directory
 
-    ```bash
-    git clone https://github.com/your-username/port-scanner.git
-    cd port-scanner
-
-    ```
-
-2. Build the project
+   ```bash
+   cd port-scanner
+   ```
+   
+3. Build and run project
 
     ```bash
     cargo build
     ```
 
-3. Run with arguments
+4. Run with arguments
 
     | Short | Long               | Type     | Default     | Description                              |
     | ----- | ------------------ | -------- | ----------- | ---------------------------------------- |
