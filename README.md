@@ -6,10 +6,12 @@ A fast, concurrent TCP/UDP port scanning tool written in Rust. Discover open ser
 
 ## 🔍 Features
 
--   Scans TCP ports 1–1024 by default
--   Use 10 parallel worker threads
--   50ms timeout per port
--   Prints open port as it’s discovered
+- **Concurrent Scanning**: Uses a configurable pool of worker threads to scan ports in parallel.
+- **TCP & UDP Support**: Checks both connection‑oriented (TCP) and connectionless (UDP) ports.
+- **Banner Grabbing**: Probes open TCP ports with a simple HTTP request to capture any service greeting.
+- **Service Mapping**: Translates common port numbers to human‑readable service names (e.g. 22 → SSH).
+- **Progress Indicator**: Live updates on how many of the total ports have been scanned.
+- **CLI Configurable**: Full command‑line interface for customizing target, port ranges, timeouts, thread count, and more.
 
 ---
 
