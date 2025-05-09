@@ -1,5 +1,8 @@
 # Port Scanner
 
+[![Rust](https://img.shields.io/badge/Rust-%23000000.svg?e&logo=rust&logoColor=white)](#)
+
+
 A fast, concurrent TCP/UDP port scanning tool written in Rust. Discover open services on a target host, complete with basic banner grabbing, well‑known service names, and live progress reporting.
 
 ---
