@@ -1,4 +1,4 @@
-# Rust Port Scanner
+# Port Scanner
 
 A simple, concurrent TCP port scanner written in Rust.  
 It scans ports 1–1024 on a specified target host using a 10‑worker thread pool and reports any open ports.
