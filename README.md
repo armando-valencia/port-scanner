@@ -1,7 +1,6 @@
 # Port Scanner
 
-A simple, concurrent TCP port scanner written in Rust.  
-It scans ports 1–1024 on a specified target host using a 10‑worker thread pool and reports any open ports.
+A fast, concurrent TCP/UDP port scanning tool written in Rust. Discover open services on a target host, complete with basic banner grabbing, well‑known service names, and live progress reporting.
 
 ---
 
