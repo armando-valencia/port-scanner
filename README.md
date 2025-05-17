@@ -3,29 +3,28 @@
 [![Rust](https://img.shields.io/badge/Rust-%23000000.svg?e&logo=rust&logoColor=white)](#)
 
 
-A fast, concurrent TCP/UDP port scanning tool written in Rust. Discover open services on a target host, complete with basic banner grabbing, well‑known service names, and live progress reporting.
+A fast TCP/UDP port scanning tool written in Rust.
 
 ---
 
-## 🔍 Features
+## Features
 
-- **Concurrent Scanning**: Uses a configurable pool of worker threads to scan ports in parallel.
-- **TCP & UDP Support**: Checks both connection‑oriented (TCP) and connectionless (UDP) ports.
-- **Banner Grabbing**: Probes open TCP ports with a simple HTTP request to capture any service greeting.
-- **Service Mapping**: Translates common port numbers to human‑readable service names (e.g. 22 → SSH).
-- **Progress Indicator**: Live updates on how many of the total ports have been scanned.
-- **CLI Configurable**: Full command‑line interface for customizing target, port ranges, timeouts, thread count, and more.
+- **Concurrent Scanning**: Uses a configurable pool of worker threads to scan ports in parallel
+- **TCP & UDP Support**: Checks both TCP and UDP ports
+- **Banner Grabbing**: Sends HTTP request to open TCP ports to check which service is being used on the port
+- **Service Mapping**: Translates common port numbers to service names (e.g. 22 → SSH)
+- **Progress Indicator**: Live updates on how many of the total ports have been scanned
 
 ---
 
-## 🚀 Prerequisites
+## Prerequisites
 
 -   Rust (1.60+): installed via [rustup](https://rustup.rs/)
 -   A terminal (macOS/Linux) or PowerShell/CMD (Windows)
 
 ---
 
-## 🛠️ Building & Running
+## Building & Running
 
 1. Clone the repo
 2. Navigate to the project directory
@@ -34,7 +33,7 @@ A fast, concurrent TCP/UDP port scanning tool written in Rust. Discover open ser
    cd port-scanner
    ```
    
-3. Build and run project
+3. Build project
 
     ```bash
     cargo build
