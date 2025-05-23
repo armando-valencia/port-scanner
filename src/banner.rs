@@ -2,9 +2,8 @@ use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpStream};
 use std::time::Duration;
 
-/// Attempts to connect to the given address and port, sends a minimal probe,
-/// and returns the first line of the service banner if any is returned.
-/// Returns `Some(line)` on success, or `None` on error or empty response.
+/// Attempts to connect to the given address and port,
+/// returning the first line of the service banner (if any).
 pub fn grab_banner(addr: &str, port: u16) -> Option<String> {
     let socket_str = format!("{}:{}", addr, port);
     let socket_addr: SocketAddr = socket_str.parse().ok()?;
@@ -15,7 +14,7 @@ pub fn grab_banner(addr: &str, port: u16) -> Option<String> {
     // Set a read timeout to avoid blocking indefinitely
     stream.set_read_timeout(Some(Duration::from_millis(100))).ok()?;
 
-    // Send a simple HTTP GET probe (many services will at least respond)
+    // Send a GET request to see if port is active
     let _ = stream.write_all(b"GET / HTTP/1.0\r\n\r\n");
 
     // Read up to 128 bytes of the response
