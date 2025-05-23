@@ -3,9 +3,7 @@ use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
-/// Spawns a background thread that periodically prints scan progress.
-/// Reports "<done>/<total> (<percent>%)" every 500ms until completion.
-/// Returns the JoinHandle so it can be joined if desired.
+/// Prints the progress in terminal
 pub fn spawn_reporter(
     total: usize,
     completed: Arc<AtomicUsize>,
