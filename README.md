@@ -20,7 +20,6 @@ A fast TCP/UDP port scanning tool written in Rust.
 ## Prerequisites
 
 -   Rust (1.60+): installed via [rustup](https://rustup.rs/)
--   A terminal (macOS/Linux) or PowerShell/CMD (Windows)
 
 ---
 
