@@ -1,0 +1,130 @@
+{
+  "banner_patterns": [
+    {
+      "pattern": "^SSH-2\\.0-OpenSSH",
+      "service": "ssh",
+      "product": "OpenSSH",
+      "confidence": 0.95
+    },
+    {
+      "pattern": "^SSH-2\\.0-",
+      "service": "ssh",
+      "product": "SSH",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "^220.*FTP",
+      "service": "ftp",
+      "product": "FTP",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "^220.*Microsoft FTP",
+      "service": "ftp",
+      "product": "Microsoft FTP",
+      "confidence": 0.95
+    },
+    {
+      "pattern": "^220.*ESMTP",
+      "service": "smtp",
+      "product": "SMTP",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "^220.*Postfix",
+      "service": "smtp",
+      "product": "Postfix",
+      "confidence": 0.95
+    },
+    {
+      "pattern": "^\\+OK.*POP3",
+      "service": "pop3",
+      "product": "POP3",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "^\\* OK.*IMAP",
+      "service": "imap",
+      "product": "IMAP",
+      "confidence": 0.9
+    }
+  ],
+  "http_server_patterns": [
+    {
+      "pattern": "nginx/(\\d+\\.\\d+\\.\\d+)",
+      "service": "http",
+      "product": "nginx",
+      "confidence": 0.95,
+      "version_group": 1
+    },
+    {
+      "pattern": "nginx",
+      "service": "http",
+      "product": "nginx",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "Apache/(\\d+\\.\\d+\\.\\d+)",
+      "service": "http",
+      "product": "Apache",
+      "confidence": 0.95,
+      "version_group": 1
+    },
+    {
+      "pattern": "Apache",
+      "service": "http",
+      "product": "Apache",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "Microsoft-IIS/(\\d+\\.\\d+)",
+      "service": "http",
+      "product": "Microsoft IIS",
+      "confidence": 0.95,
+      "version_group": 1
+    },
+    {
+      "pattern": "Microsoft-IIS",
+      "service": "http",
+      "product": "Microsoft IIS",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "LiteSpeed",
+      "service": "http",
+      "product": "LiteSpeed",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "cloudflare",
+      "service": "http",
+      "product": "Cloudflare",
+      "confidence": 0.85
+    },
+    {
+      "pattern": "AmazonS3",
+      "service": "http",
+      "product": "Amazon S3",
+      "confidence": 0.9
+    }
+  ],
+  "port_hints": {
+    "22": "ssh",
+    "21": "ftp",
+    "25": "smtp",
+    "80": "http",
+    "110": "pop3",
+    "143": "imap",
+    "443": "https",
+    "465": "smtps",
+    "587": "smtp",
+    "993": "imaps",
+    "995": "pop3s",
+    "3306": "mysql",
+    "5432": "postgresql",
+    "6379": "redis",
+    "27017": "mongodb",
+    "3389": "rdp",
+    "5900": "vnc"
+  }
+}

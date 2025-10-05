@@ -3,11 +3,17 @@ mod scanner;
 mod udp;
 mod util;
 mod progress;
+mod service_info;
+mod signatures;
+mod fingerprint;
+mod protocols;
 
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::atomic::AtomicUsize;
 use std::thread;
 use clap::Parser;
+use service_info::ServiceInfo;
+use signatures::SignatureMatcher;
 
 #[derive(Parser, Debug)]
 #[command(name = "port-scanner", about = "A fast, concurrent TCP/UDP port scanner")]
@@ -35,16 +41,28 @@ fn main() {
     let opts = Opts::parse();
     println!("Starting scan on target: {}", opts.target);
 
+    // Load signature database
+    let matcher = match SignatureMatcher::load("signatures.json") {
+        Ok(m) => Arc::new(m),
+        Err(e) => {
+            eprintln!("Warning: Failed to load signatures.json: {}", e);
+            eprintln!("Continuing with basic port scanning only...");
+            return;
+        }
+    };
+
     let target = Arc::new(opts.target);
     let start_port = opts.start_port;
     let end_port = opts.end_port;
     let total_ports = (end_port - start_port + 1) as usize;
+    let timeout_ms = opts.timeout_ms;
+    let udp_timeout_ms = opts.udp_timeout_ms;
 
     let completed = Arc::new(AtomicUsize::new(0));
     let reporter_handle = progress::spawn_reporter(total_ports, Arc::clone(&completed));
 
     let (task_tx, task_rx_raw) = mpsc::channel::<u16>();
-    let (res_tx,  res_rx) = mpsc::channel::<u16>();
+    let (res_tx,  res_rx) = mpsc::channel::<ServiceInfo>();
 
     // Wrap the receiver so it can be shared by multiple workers
     let task_rx = Arc::new(Mutex::new(task_rx_raw));
@@ -56,6 +74,7 @@ fn main() {
         let res_tx = res_tx.clone();
         let target = Arc::clone(&target);
         let completed = Arc::clone(&completed);
+        let matcher = Arc::clone(&matcher);
 
         let handle = thread::spawn(move || {
             // Delegate to scanner module
@@ -64,8 +83,9 @@ fn main() {
                 res_tx,
                 target,
                 completed,
-                opts.timeout_ms,
-                opts.udp_timeout_ms
+                timeout_ms,
+                udp_timeout_ms,
+                matcher
             );
         });
         handles.push(handle);
@@ -77,8 +97,9 @@ fn main() {
     }
     drop(task_tx);
 
-    for open_port in res_rx {
-        println!("[RESULT] Port {} is OPEN", open_port);
+    let mut results: Vec<ServiceInfo> = Vec::new();
+    for service_info in res_rx {
+        results.push(service_info);
     }
 
     // Wait for all worker threads to finish
@@ -87,5 +108,14 @@ fn main() {
     }
     let _ = reporter_handle.join();
 
-    println!("Scan complete.");
+    // Print summary
+    println!("\n========== SCAN SUMMARY ==========");
+    println!("Total open ports found: {}", results.len());
+    println!("==================================\n");
+
+    for info in &results {
+        println!("[RESULT] {}", info.display_full());
+    }
+
+    println!("\nScan complete.");
 }

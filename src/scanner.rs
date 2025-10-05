@@ -6,9 +6,10 @@ use std::{
 };
 use std::net::ToSocketAddrs;
 
-use crate::banner::grab_banner;
 use crate::udp::scan_udp;
-use crate::util::service_name;
+use crate::fingerprint::fingerprint_service;
+use crate::service_info::{ServiceInfo, Protocol};
+use crate::signatures::SignatureMatcher;
 
 
 // Scans a TCP port on the given address. Returns `true` if the port is open.
@@ -29,15 +30,16 @@ pub fn scan_tcp(addr: &str, port: u16, timeout_ms: u64) -> bool {
 }
 
 // Worker loop: pulls port numbers from `task_rx`, scans TCP and UDP,
-// prints results with service names and banners, sends any open ports
-// into `res_tx`, and increments the shared `completed` counter.
+// performs service fingerprinting, sends ServiceInfo results to `res_tx`,
+// and increments the shared `completed` counter.
 pub fn worker_loop(
     task_rx: Arc<Mutex<Receiver<u16>>>,
-    res_tx: Sender<u16>,
+    res_tx: Sender<ServiceInfo>,
     target: Arc<String>,
     completed: Arc<AtomicUsize>,
     timeout_ms: u64,
     udp_timeout_ms: u64,
+    matcher: Arc<SignatureMatcher>,
 ) {
     loop {
         let port = {
@@ -48,20 +50,19 @@ pub fn worker_loop(
             }
         };
 
+        // Scan TCP
         if scan_tcp(&target, port, timeout_ms) {
-            let svc = service_name(port);
-            if let Some(banner) = grab_banner(&target, port) {
-                println!("TCP Port {} ({}) OPEN -- {}", port, svc, banner);
-            } else {
-                println!("TCP Port {} ({}) OPEN", port, svc);
-            }
-            let _ = res_tx.send(port);
+            // Perform fingerprinting
+            let service_info = fingerprint_service(&target, port, Protocol::TCP, &matcher);
+            println!("{}", service_info.display_full());
+            let _ = res_tx.send(service_info);
         }
 
+        // Scan UDP
         if scan_udp(&target, port, udp_timeout_ms) {
-            let svc = service_name(port);
-            println!("UDP Port {} ({}) OPEN or FILTERED", port, svc);
-            let _ = res_tx.send(port);
+            let service_info = fingerprint_service(&target, port, Protocol::UDP, &matcher);
+            println!("{}", service_info.display_full());
+            let _ = res_tx.send(service_info);
         }
 
         // Update progress
