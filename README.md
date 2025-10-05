@@ -60,15 +60,17 @@ Launch the web interface for an intuitive scanning experience:
 cargo run -- --web
 ```
 
-Then open your browser to **http://127.0.0.1:9876**
+Then open your browser to **http://127.0.0.1:9876** and begin scanning.
+
+![Web Interface Screenshot](assets/scanner-example.png)
 
 The web UI provides:
 
--   Clean, modern interface with gradient styling
+-   "How It Works" documentation page
 -   Real-time progress bar with percentage updates
 -   Live results table that populates as ports are discovered
 -   Color-coded confidence levels (high/medium/low)
--   Service fingerprinting with version detection
+-   Service fingerprinting details
 
 ### CLI Mode
 
@@ -128,9 +130,10 @@ Total open ports found: 3
 
 ### Web UI
 
-The web interface displays results in a beautiful table format with:
+The web interface features a modern dark gothic design with:
 
--   Real-time progress tracking
--   Color-coded confidence indicators
--   Sortable columns for port, service, version, and confidence
--   Responsive design that works on all screen sizes
+-   Sidebar navigation with Scanner and "How It Works" pages
+-   Real-time progress tracking with visual progress bar
+-   Live results table with color-coded confidence indicators
+-   Clean, high-contrast design optimized for readability
+-   Built-in documentation explaining the scanning process
