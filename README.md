@@ -64,11 +64,11 @@ Then open your browser to **http://127.0.0.1:9876**
 
 The web UI provides:
 
--   ✨ Clean, modern interface with gradient styling
--   📊 Real-time progress bar with percentage updates
--   📋 Live results table that populates as ports are discovered
--   🎨 Color-coded confidence levels (high/medium/low)
--   🔍 Service fingerprinting with version detection
+-   Clean, modern interface with gradient styling
+-   Real-time progress bar with percentage updates
+-   Live results table that populates as ports are discovered
+-   Color-coded confidence levels (high/medium/low)
+-   Service fingerprinting with version detection
 
 ### CLI Mode
 
