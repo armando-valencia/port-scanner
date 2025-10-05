@@ -1,260 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Port Scanner</title>
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Port Scanner</title>
+		<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+		<link rel="stylesheet" href="/styles.css" />
+	</head>
+	<body>
+		<!-- Sidebar -->
+		<nav class="sidebar">
+			<div class="logo">
+				<h2>Port Scanner</h2>
+			</div>
+			<ul class="nav-menu">
+				<li class="nav-item">
+					<a
+						href="#"
+						class="nav-link active"
+						onclick="showPage('scanner')"
+					>
+						Scanner
+					</a>
+				</li>
+				<li class="nav-item">
+					<a
+						href="#"
+						class="nav-link"
+						onclick="showPage('how-it-works')"
+					>
+						How It Works
+					</a>
+				</li>
+			</ul>
+		</nav>
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 2rem;
-        }
+		<!-- Main Content -->
+		<main class="main-content">
+			<!-- Scanner Page -->
+			<div id="scanner" class="page active">
+				<div class="page-header">
+					<h1 class="page-title">Port Scanner</h1>
+					<p class="page-subtitle">
+						Fast concurrent TCP/UDP port scanning with service
+						fingerprinting
+					</p>
+				</div>
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 2rem;
-        }
+				<div class="scanner-card">
+					<form
+						class="scan-form"
+						hx-post="/api/scan"
+						hx-target="#scan-output"
+						hx-swap="innerHTML"
+					>
+						<div class="form-group">
+							<label for="target">Target Host</label>
+							<input
+								type="text"
+								id="target"
+								name="target"
+								value="127.0.0.1"
+								required
+							/>
+						</div>
 
-        h1 {
-            color: #333;
-            margin-bottom: 0.5rem;
-            font-size: 2rem;
-        }
+						<div class="form-group">
+							<label for="start_port">Start Port</label>
+							<input
+								type="number"
+								id="start_port"
+								name="start_port"
+								value="1"
+								min="1"
+								max="65535"
+								required
+							/>
+						</div>
 
-        .subtitle {
-            color: #666;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
+						<div class="form-group">
+							<label for="end_port">End Port</label>
+							<input
+								type="number"
+								id="end_port"
+								name="end_port"
+								value="1024"
+								min="1"
+								max="65535"
+								required
+							/>
+						</div>
 
-        .scan-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
+						<div class="form-group">
+							<label for="threads">Threads</label>
+							<input
+								type="number"
+								id="threads"
+								name="threads"
+								value="10"
+								min="1"
+								max="100"
+								required
+							/>
+						</div>
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
+						<div class="form-group">
+							<label for="timeout_ms">TCP Timeout (ms)</label>
+							<input
+								type="number"
+								id="timeout_ms"
+								name="timeout_ms"
+								value="50"
+								min="10"
+								max="5000"
+								required
+							/>
+						</div>
 
-        label {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #444;
-            font-size: 0.9rem;
-        }
+						<div class="form-group">
+							<label for="udp_timeout_ms">UDP Timeout (ms)</label>
+							<input
+								type="number"
+								id="udp_timeout_ms"
+								name="udp_timeout_ms"
+								value="100"
+								min="10"
+								max="5000"
+								required
+							/>
+						</div>
 
-        input {
-            padding: 0.75rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
+						<div class="button-group">
+							<button type="submit">Start Scan</button>
+						</div>
+					</form>
+				</div>
 
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
+				<div id="scan-output"></div>
+			</div>
 
-        .button-group {
-            grid-column: 1 / -1;
-            display: flex;
-            gap: 1rem;
-        }
+			<!-- How It Works Page -->
+			<div id="how-it-works" class="page">
+				<div class="page-header">
+					<h1 class="page-title">How It Works</h1>
+					<p class="page-subtitle">
+						Understanding the port scanning process
+					</p>
+				</div>
 
-        button {
-            flex: 1;
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+				<div class="info-section">
+					<h3>What is Port Scanning?</h3>
+					<p>
+						Port scanning is a technique used to find open network
+						ports on a computer or server. Each open port can
+						represent a service, like a website or remote login.
+						This tool scans those ports in parallel to determine
+						what kind of service is running.
+					</p>
+				</div>
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
+				<div class="info-section">
+					<h3>Scanning Process</h3>
+					<ul class="info-list">
+						<li>
+							<strong>Connection Attempts:</strong> The scanner
+							attempts to establish TCP connections to each port
+							in your specified range
+						</li>
+						<li>
+							<strong>Parallel Execution:</strong> Multiple worker
+							threads scan ports simultaneously for faster results
+						</li>
+						<li>
+							<strong>Service Detection:</strong> When a port is
+							open, the scanner probes it to identify the running
+							service
+						</li>
+						<li>
+							<strong>Fingerprinting:</strong> Analyzes banners,
+							headers, and protocol responses to determine service
+							type and version
+						</li>
+					</ul>
+				</div>
 
-        button:active {
-            transform: translateY(0);
-        }
+				<div class="info-section">
+					<h3>Service Fingerprinting</h3>
+					<p>
+						The scanner uses multiple detection methods to identify
+						services:
+					</p>
+					<ul class="info-list">
+						<li>Banner grabbing for SSH, FTP, SMTP, POP3, IMAP</li>
+						<li>
+							HTTP Server header analysis with version extraction
+						</li>
+						<li>TLS/HTTPS detection and certificate inspection</li>
+						<li>Protocol-specific probing for various services</li>
+						<li>
+							Signature database with 30+ web servers and dev
+							tools
+						</li>
+					</ul>
+				</div>
 
-        .progress-bar {
-            width: 100%;
-            height: 30px;
-            background: #f0f0f0;
-            border-radius: 15px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
+				<div class="info-section">
+					<h3>Configuration Options</h3>
+					<ul class="info-list">
+						<li>
+							<strong>Target Host:</strong> IP address or hostname
+							to scan
+						</li>
+						<li>
+							<strong>Port Range:</strong> Start and end ports
+							(1-65535)
+						</li>
+						<li>
+							<strong>Threads:</strong> Number of concurrent
+							scanning threads (higher = faster, but more resource
+							intensive)
+						</li>
+						<li>
+							<strong>TCP Timeout:</strong> How long to wait for
+							TCP connection (lower = faster, but may miss slow
+							services)
+						</li>
+						<li>
+							<strong>UDP Timeout:</strong> How long to wait for
+							UDP response
+						</li>
+					</ul>
+				</div>
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-        }
+				<div class="info-section">
+					<h3>CLI Usage</h3>
+					<p>You can also run the scanner from the command line:</p>
+					<div class="code-block">
+						cargo run -- -d 127.0.0.1 -s 1 -e 1000 -t 20
+					</div>
+					<p>This scans localhost ports 1-1000 using 20 threads.</p>
+				</div>
 
-        #progress-container {
-            margin: 2rem 0;
-        }
+				<div class="info-section">
+					<h3>Understanding Results</h3>
+					<ul class="info-list">
+						<li>
+							<strong>Port:</strong> The port number that was
+							found open
+						</li>
+						<li><strong>Protocol:</strong> TCP or UDP</li>
+						<li>
+							<strong>Service:</strong> Identified service name
+							(e.g., SSH, HTTP, nginx)
+						</li>
+						<li>
+							<strong>Version:</strong> Service version if
+							detected
+						</li>
+						<li>
+							<strong>Banner:</strong> Raw response from the
+							service
+						</li>
+						<li>
+							<strong>Confidence:</strong> How certain the
+							detection is (High: 80%+, Medium: 50-80%, Low: <50%)
+						</li>
+					</ul>
+				</div>
+			</div>
+		</main>
 
-        #progress-container p {
-            text-align: center;
-            color: #666;
-            font-weight: 500;
-        }
+		<script>
+			function showPage(pageId) {
+				// Hide all pages
+				document.querySelectorAll(".page").forEach((page) => {
+					page.classList.remove("active");
+				});
 
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
-        }
+				// Remove active from all nav links
+				document.querySelectorAll(".nav-link").forEach((link) => {
+					link.classList.remove("active");
+				});
 
-        .results-table thead {
-            background: #f8f9fa;
-        }
+				// Show selected page
+				document.getElementById(pageId).classList.add("active");
 
-        .results-table th {
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: #333;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .results-table td {
-            padding: 1rem;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .results-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .state-open {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: #10b981;
-            color: white;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .confidence {
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .confidence.high {
-            background: #10b981;
-            color: white;
-        }
-
-        .confidence.medium {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .confidence.low {
-            background: #ef4444;
-            color: white;
-        }
-
-        .banner {
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            color: #666;
-            max-width: 300px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .no-results {
-            text-align: center;
-            color: #999;
-            padding: 2rem;
-            font-style: italic;
-        }
-
-        #results-container {
-            margin-top: 2rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🔍 Port Scanner</h1>
-        <p class="subtitle">Fast concurrent TCP/UDP port scanning with service fingerprinting</p>
-
-        <form class="scan-form" hx-post="/api/scan" hx-target="#scan-output" hx-swap="innerHTML">
-            <div class="form-group">
-                <label for="target">Target Host</label>
-                <input type="text" id="target" name="target" value="127.0.0.1" required>
-            </div>
-
-            <div class="form-group">
-                <label for="start_port">Start Port</label>
-                <input type="number" id="start_port" name="start_port" value="1" min="1" max="65535" required>
-            </div>
-
-            <div class="form-group">
-                <label for="end_port">End Port</label>
-                <input type="number" id="end_port" name="end_port" value="1024" min="1" max="65535" required>
-            </div>
-
-            <div class="form-group">
-                <label for="threads">Threads</label>
-                <input type="number" id="threads" name="threads" value="10" min="1" max="100" required>
-            </div>
-
-            <div class="form-group">
-                <label for="timeout_ms">TCP Timeout (ms)</label>
-                <input type="number" id="timeout_ms" name="timeout_ms" value="50" min="10" max="5000" required>
-            </div>
-
-            <div class="form-group">
-                <label for="udp_timeout_ms">UDP Timeout (ms)</label>
-                <input type="number" id="udp_timeout_ms" name="udp_timeout_ms" value="100" min="10" max="5000" required>
-            </div>
-
-            <div class="button-group">
-                <button type="submit">Start Scan</button>
-            </div>
-        </form>
-
-        <div id="scan-output">
-            <!-- Progress and results will appear here -->
-        </div>
-    </div>
-</body>
+				// Add active to clicked nav link
+				event.target.closest(".nav-link").classList.add("active");
+			}
+		</script>
+	</body>
 </html>

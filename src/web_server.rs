@@ -36,6 +36,7 @@ pub async fn run_web_server(matcher: Arc<SignatureMatcher>) -> Result<(), Box<dy
 
     let app = Router::new()
         .route("/", get(serve_index))
+        .route("/styles.css", get(serve_styles))
         .route("/api/scan", post(start_scan))
         .route("/api/status", get(get_status))
         .route("/api/results", get(get_results))
@@ -50,6 +51,13 @@ pub async fn run_web_server(matcher: Arc<SignatureMatcher>) -> Result<(), Box<dy
 
 async fn serve_index() -> Html<&'static str> {
     Html(include_str!("../static/index.html"))
+}
+
+async fn serve_styles() -> ([(&'static str, &'static str); 1], &'static str) {
+    (
+        [("Content-Type", "text/css")],
+        include_str!("../static/styles.css")
+    )
 }
 
 async fn start_scan(
