@@ -94,7 +94,7 @@ async fn start_scan(
                 <p>Scan starting...</p>
             </div>
         </div>
-        <div id="results-container" hx-get="/api/results" hx-trigger="every 500ms" hx-swap="innerHTML">
+        <div id="results-container" hx-get="/api/results" hx-trigger="every 1s" hx-swap="outerHTML">
         </div>
     "#.to_string())
 }
@@ -158,21 +158,29 @@ async fn get_status() -> Html<String> {
         };
 
         let status_text = if state.is_complete() {
-            format!("✅ Scan complete! {}/{} ports scanned", scanned, total)
+            format!("Scan complete! {}/{} ports scanned", scanned, total)
         } else if state.is_running() {
-            format!("⏳ Scanning... {}/{} ports ({:.0}%)", scanned, total, percentage)
+            format!("Scanning... {}/{} ports ({:.0}%)", scanned, total, percentage)
         } else {
             "Idle".to_string()
         };
 
+        // Only poll if scan is still running
+        let (poll_trigger, results_update) = if state.is_complete() {
+            (String::new(), r#"<script>htmx.trigger('#results-container', 'scan-complete')</script>"#)
+        } else {
+            (r#" hx-get="/api/status" hx-trigger="every 500ms" hx-swap="outerHTML""#.to_string(), "")
+        };
+
         Html(format!(r#"
-            <div hx-get="/api/status" hx-trigger="every 500ms" hx-swap="outerHTML">
+            <div{}>
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: {}%"></div>
                 </div>
                 <p>{}</p>
             </div>
-        "#, percentage, status_text))
+            {}
+        "#, poll_trigger, percentage, status_text, results_update))
     } else {
         Html(r#"
             <div>
@@ -189,10 +197,23 @@ async fn get_results() -> Html<String> {
         let results = state.get_results();
 
         if results.is_empty() {
-            return Html("<p class=\"no-results\">No open ports found yet...</p>".to_string());
+            let poll_attr = if state.is_complete() {
+                String::new()
+            } else {
+                r#" hx-get="/api/results" hx-trigger="every 1s" hx-swap="outerHTML""#.to_string()
+            };
+            return Html(format!(r#"<div id="results-container"{}><p class="no-results">No open ports found yet...</p></div>"#, poll_attr));
         }
 
-        let mut html = String::from(r#"
+        // Only poll if scan is still running
+        let poll_attr = if state.is_complete() {
+            String::new()
+        } else {
+            r#" hx-get="/api/results" hx-trigger="every 1s" hx-swap="outerHTML""#.to_string()
+        };
+
+        let mut html = format!(r#"<div id="results-container"{}>"#, poll_attr);
+        html.push_str(r#"
             <table class="results-table">
                 <thead>
                     <tr>
@@ -239,9 +260,9 @@ async fn get_results() -> Html<String> {
             ));
         }
 
-        html.push_str("</tbody></table>");
+        html.push_str("</tbody></table></div>");
         Html(html)
     } else {
-        Html("<p>No scan data available</p>".to_string())
+        Html(r#"<div id="results-container"><p>No scan data available</p></div>"#.to_string())
     }
 }
