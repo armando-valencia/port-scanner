@@ -1,8 +1,9 @@
 # Port Scanner
 
 [![Rust](https://img.shields.io/badge/Rust-%23000000.svg?e&logo=rust&logoColor=white)](#)
+[![HTMX](https://img.shields.io/badge/HTMX-%23000000.svg?e&logo=htmx&logoColor=white)](#)
 
-A fast TCP/UDP port scanning tool written in Rust.
+A fast TCP/UDP port scanning tool written in Rust with a web-based interface.
 
 ---
 
