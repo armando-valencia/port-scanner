@@ -7,6 +7,8 @@ mod service_info;
 mod signatures;
 mod fingerprint;
 mod protocols;
+mod web_state;
+mod web_server;
 
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::atomic::AtomicUsize;
@@ -35,11 +37,15 @@ struct Opts {
 
     #[arg(short = 'u', long, default_value_t = 100)]
     udp_timeout_ms: u64,
+
+    /// Launch web UI instead of CLI mode
+    #[arg(short = 'w', long)]
+    web: bool,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let opts = Opts::parse();
-    println!("Starting scan on target: {}", opts.target);
 
     // Load signature database
     let matcher = match SignatureMatcher::load("signatures.json") {
@@ -50,6 +56,17 @@ fn main() {
             return;
         }
     };
+
+    // Check if web mode is requested
+    if opts.web {
+        if let Err(e) = web_server::run_web_server(matcher).await {
+            eprintln!("Web server error: {}", e);
+        }
+        return;
+    }
+
+    // CLI mode
+    println!("Starting scan on target: {}", opts.target);
 
     let target = Arc::new(opts.target);
     let start_port = opts.start_port;
