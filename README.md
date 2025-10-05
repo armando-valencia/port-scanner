@@ -11,9 +11,18 @@ A fast TCP/UDP port scanning tool written in Rust.
 
 - **Concurrent Scanning**: Uses a configurable pool of worker threads to scan ports in parallel
 - **TCP & UDP Support**: Checks both TCP and UDP ports
-- **Banner Grabbing**: Sends HTTP request to open TCP ports to check which service is being used on the port
-- **Service Mapping**: Translates common port numbers to service names (e.g. 22 → SSH)
+- **Service Fingerprinting**: Service identification using multiple detection methods:
+  - Banner grabbing for SSH, FTP, SMTP, POP3, IMAP
+  - HTTP Server header analysis with version extraction
+  - TLS/HTTPS detection
+  - Protocol-specific probing
+- **Extensive Signature Database**: Recognizes 30+ web servers and development tools including:
+  - Production servers: nginx, Apache, IIS, Tomcat, Jetty
+  - Dev servers: Vite, Webpack, Metro (React Native), Expo, Next.js, Angular CLI
+  - Application servers: Flask, Django, Rails, Express.js, ASP.NET, Gunicorn, Uvicorn
+- **Service Mapping**: Translates common port numbers to service names (e.g. 22 → SSH, 8081 → Metro)
 - **Progress Indicator**: Live updates on how many of the total ports have been scanned
+- **Detailed Results**: Shows service name, version, confidence score, and banner information
 
 ---
 
@@ -62,3 +71,29 @@ A fast TCP/UDP port scanning tool written in Rust.
         ```bash
         cargo run -- --target scanme.nmap.org --start-port 1 --end-port 65535 --threads 50 --timeout-ms 100 --udp-timeout-ms 200
         ```
+
+    - Fingerprint a specific service:
+
+        ```bash
+        cargo run -- -d 192.168.1.100 -s 8081 -e 8081 -c 2000
+        ```
+
+---
+
+## Output Example
+
+```
+Scanning target 192.168.86.250 from port 1 to 1000...
+
+TCP Port 22 (OPEN) - OpenSSH_8.2p1 | Banner: SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.5 [confidence: 95%]
+TCP Port 80 (OPEN) - nginx v1.18.0 | Banner: HTTP/1.1 200 OK [confidence: 95%]
+TCP Port 8081 (OPEN) - Metro Bundler (React Native) | Banner: HTTP/1.1 200 OK [confidence: 90%]
+
+========== SCAN SUMMARY ==========
+Total open ports found: 3
+==================================
+
+[RESULT] TCP Port 22 (OPEN) - OpenSSH_8.2p1 | Banner: SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.5 [confidence: 95%]
+[RESULT] TCP Port 80 (OPEN) - nginx v1.18.0 | Banner: HTTP/1.1 200 OK [confidence: 95%]
+[RESULT] TCP Port 8081 (OPEN) - Metro Bundler (React Native) | Banner: HTTP/1.1 200 OK [confidence: 90%]
+```
