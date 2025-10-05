@@ -9,9 +9,10 @@ A fast TCP/UDP port scanning tool written in Rust.
 
 ## Features
 
+- **Dual Interface**: Run as CLI tool or launch a web UI for easier interaction
 - **Concurrent Scanning**: Uses a configurable pool of worker threads to scan ports in parallel
 - **TCP & UDP Support**: Checks both TCP and UDP ports
-- **Service Fingerprinting**: Service identification using multiple detection methods:
+- **Service Fingerprinting**: Intelligent service identification using multiple detection methods:
   - Banner grabbing for SSH, FTP, SMTP, POP3, IMAP
   - HTTP Server header analysis with version extraction
   - TLS/HTTPS detection
@@ -21,7 +22,7 @@ A fast TCP/UDP port scanning tool written in Rust.
   - Dev servers: Vite, Webpack, Metro (React Native), Expo, Next.js, Angular CLI
   - Application servers: Flask, Django, Rails, Express.js, ASP.NET, Gunicorn, Uvicorn
 - **Service Mapping**: Translates common port numbers to service names (e.g. 22 → SSH, 8081 → Metro)
-- **Progress Indicator**: Live updates on how many of the total ports have been scanned
+- **Real-time Progress**: Live updates via CLI or web UI with progress bars and status indicators
 - **Detailed Results**: Shows service name, version, confidence score, and banner information
 
 ---
@@ -40,47 +41,73 @@ A fast TCP/UDP port scanning tool written in Rust.
    ```bash
    cd port-scanner
    ```
-   
+
 3. Build project
 
     ```bash
     cargo build
     ```
 
-4. Run with arguments
+---
 
-    | Short | Long               | Type     | Default     | Description                              |
-    | ----- | ------------------ | -------- | ----------- | ---------------------------------------- |
-    | `-d`  | `--target`         | `String` | `127.0.0.1` | Hostname or IP address to scan           |
-    | `-s`  | `--start-port`     | `u16`    | `1`         | First port in the scan range (inclusive) |
-    | `-e`  | `--end-port`       | `u16`    | `1024`      | Last port in the scan range (inclusive)  |
-    | `-t`  | `--threads`        | `usize`  | `10`        | Number of worker threads to use          |
-    | `-c`  | `--timeout-ms`     | `u64`    | `50`        | TCP connect timeout in milliseconds      |
-    | `-u`  | `--udp-timeout-ms` | `u64`    | `100`       | UDP receive timeout in milliseconds      |
+## Usage
 
-    ### Examples
+### Web UI Mode
 
-    - Scan localhost ports 1–1000 using 20 threads:
+Launch the web interface for an intuitive scanning experience:
 
-        ```bash
-        cargo run -- -d 127.0.0.1 -s 1 -e 1000 -t 20
-        ```
+```bash
+cargo run -- --web
+```
 
-    - Scan a remote host with custom timeouts:
+Then open your browser to **http://127.0.0.1:9876**
 
-        ```bash
-        cargo run -- --target scanme.nmap.org --start-port 1 --end-port 65535 --threads 50 --timeout-ms 100 --udp-timeout-ms 200
-        ```
+The web UI provides:
+- ✨ Clean, modern interface with gradient styling
+- 📊 Real-time progress bar with percentage updates
+- 📋 Live results table that populates as ports are discovered
+- 🎨 Color-coded confidence levels (high/medium/low)
+- 🔍 Service fingerprinting with version detection
 
-    - Fingerprint a specific service:
+### CLI Mode
 
-        ```bash
-        cargo run -- -d 192.168.1.100 -s 8081 -e 8081 -c 2000
-        ```
+Run directly from the command line with arguments:
+
+| Short | Long               | Type     | Default     | Description                              |
+| ----- | ------------------ | -------- | ----------- | ---------------------------------------- |
+| `-d`  | `--target`         | `String` | `127.0.0.1` | Hostname or IP address to scan           |
+| `-s`  | `--start-port`     | `u16`    | `1`         | First port in the scan range (inclusive) |
+| `-e`  | `--end-port`       | `u16`    | `1024`      | Last port in the scan range (inclusive)  |
+| `-t`  | `--threads`        | `usize`  | `10`        | Number of worker threads to use          |
+| `-c`  | `--timeout-ms`     | `u64`    | `50`        | TCP connect timeout in milliseconds      |
+| `-u`  | `--udp-timeout-ms` | `u64`    | `100`       | UDP receive timeout in milliseconds      |
+| `-w`  | `--web`            | `bool`   | `false`     | Launch web UI instead of CLI mode        |
+
+#### CLI Examples
+
+- Scan localhost ports 1–1000 using 20 threads:
+
+    ```bash
+    cargo run -- -d 127.0.0.1 -s 1 -e 1000 -t 20
+    ```
+
+- Scan a remote host with custom timeouts:
+
+    ```bash
+    cargo run -- --target scanme.nmap.org --start-port 1 --end-port 65535 --threads 50 --timeout-ms 100 --udp-timeout-ms 200
+    ```
+
+- Fingerprint a specific service:
+
+    ```bash
+    cargo run -- -d 192.168.1.100 -s 8081 -e 8081 -c 2000
+    ```
 
 ---
 
-## Output Example
+## Output Examples
+
+### CLI Output
 
 ```
 Scanning target 192.168.86.250 from port 1 to 1000...
@@ -97,3 +124,11 @@ Total open ports found: 3
 [RESULT] TCP Port 80 (OPEN) - nginx v1.18.0 | Banner: HTTP/1.1 200 OK [confidence: 95%]
 [RESULT] TCP Port 8081 (OPEN) - Metro Bundler (React Native) | Banner: HTTP/1.1 200 OK [confidence: 90%]
 ```
+
+### Web UI
+
+The web interface displays results in a beautiful table format with:
+- Real-time progress tracking
+- Color-coded confidence indicators
+- Sortable columns for port, service, version, and confidence
+- Responsive design that works on all screen sizes

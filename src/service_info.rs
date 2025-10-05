@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Protocol {
@@ -6,10 +7,28 @@ pub enum Protocol {
     UDP,
 }
 
+impl fmt::Display for Protocol {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Protocol::TCP => write!(f, "TCP"),
+            Protocol::UDP => write!(f, "UDP"),
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PortState {
     Open,
     Filtered,
+}
+
+impl fmt::Display for PortState {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            PortState::Open => write!(f, "OPEN"),
+            PortState::Filtered => write!(f, "FILTERED"),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
