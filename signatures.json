@@ -1,130 +1,310 @@
 {
-  "banner_patterns": [
-    {
-      "pattern": "^SSH-2\\.0-OpenSSH",
-      "service": "ssh",
-      "product": "OpenSSH",
-      "confidence": 0.95
-    },
-    {
-      "pattern": "^SSH-2\\.0-",
-      "service": "ssh",
-      "product": "SSH",
-      "confidence": 0.9
-    },
-    {
-      "pattern": "^220.*FTP",
-      "service": "ftp",
-      "product": "FTP",
-      "confidence": 0.9
-    },
-    {
-      "pattern": "^220.*Microsoft FTP",
-      "service": "ftp",
-      "product": "Microsoft FTP",
-      "confidence": 0.95
-    },
-    {
-      "pattern": "^220.*ESMTP",
-      "service": "smtp",
-      "product": "SMTP",
-      "confidence": 0.9
-    },
-    {
-      "pattern": "^220.*Postfix",
-      "service": "smtp",
-      "product": "Postfix",
-      "confidence": 0.95
-    },
-    {
-      "pattern": "^\\+OK.*POP3",
-      "service": "pop3",
-      "product": "POP3",
-      "confidence": 0.9
-    },
-    {
-      "pattern": "^\\* OK.*IMAP",
-      "service": "imap",
-      "product": "IMAP",
-      "confidence": 0.9
-    }
-  ],
-  "http_server_patterns": [
-    {
-      "pattern": "nginx/(\\d+\\.\\d+\\.\\d+)",
-      "service": "http",
-      "product": "nginx",
-      "confidence": 0.95,
-      "version_group": 1
-    },
-    {
-      "pattern": "nginx",
-      "service": "http",
-      "product": "nginx",
-      "confidence": 0.9
-    },
-    {
-      "pattern": "Apache/(\\d+\\.\\d+\\.\\d+)",
-      "service": "http",
-      "product": "Apache",
-      "confidence": 0.95,
-      "version_group": 1
-    },
-    {
-      "pattern": "Apache",
-      "service": "http",
-      "product": "Apache",
-      "confidence": 0.9
-    },
-    {
-      "pattern": "Microsoft-IIS/(\\d+\\.\\d+)",
-      "service": "http",
-      "product": "Microsoft IIS",
-      "confidence": 0.95,
-      "version_group": 1
-    },
-    {
-      "pattern": "Microsoft-IIS",
-      "service": "http",
-      "product": "Microsoft IIS",
-      "confidence": 0.9
-    },
-    {
-      "pattern": "LiteSpeed",
-      "service": "http",
-      "product": "LiteSpeed",
-      "confidence": 0.9
-    },
-    {
-      "pattern": "cloudflare",
-      "service": "http",
-      "product": "Cloudflare",
-      "confidence": 0.85
-    },
-    {
-      "pattern": "AmazonS3",
-      "service": "http",
-      "product": "Amazon S3",
-      "confidence": 0.9
-    }
-  ],
-  "port_hints": {
-    "22": "ssh",
-    "21": "ftp",
-    "25": "smtp",
-    "80": "http",
-    "110": "pop3",
-    "143": "imap",
-    "443": "https",
-    "465": "smtps",
-    "587": "smtp",
-    "993": "imaps",
-    "995": "pop3s",
-    "3306": "mysql",
-    "5432": "postgresql",
-    "6379": "redis",
-    "27017": "mongodb",
-    "3389": "rdp",
-    "5900": "vnc"
-  }
+	"banner_patterns": [
+		{
+			"pattern": "^SSH-2\\.0-OpenSSH",
+			"service": "ssh",
+			"product": "OpenSSH",
+			"confidence": 0.95
+		},
+		{
+			"pattern": "^SSH-2\\.0-",
+			"service": "ssh",
+			"product": "SSH",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "^220.*FTP",
+			"service": "ftp",
+			"product": "FTP",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "^220.*Microsoft FTP",
+			"service": "ftp",
+			"product": "Microsoft FTP",
+			"confidence": 0.95
+		},
+		{
+			"pattern": "^220.*ESMTP",
+			"service": "smtp",
+			"product": "SMTP",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "^220.*Postfix",
+			"service": "smtp",
+			"product": "Postfix",
+			"confidence": 0.95
+		},
+		{
+			"pattern": "^\\+OK.*POP3",
+			"service": "pop3",
+			"product": "POP3",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "^\\* OK.*IMAP",
+			"service": "imap",
+			"product": "IMAP",
+			"confidence": 0.9
+		}
+	],
+	"http_server_patterns": [
+		{
+			"pattern": "nginx/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "nginx",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "nginx",
+			"service": "http",
+			"product": "nginx",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Apache/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Apache",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "Apache",
+			"service": "http",
+			"product": "Apache",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Microsoft-IIS/(\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Microsoft IIS",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "Microsoft-IIS",
+			"service": "http",
+			"product": "Microsoft IIS",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "LiteSpeed",
+			"service": "http",
+			"product": "LiteSpeed",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "cloudflare",
+			"service": "http",
+			"product": "Cloudflare",
+			"confidence": 0.85
+		},
+		{
+			"pattern": "AmazonS3",
+			"service": "http",
+			"product": "Amazon S3",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Metro/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Metro Bundler (React Native)",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "Metro|metro",
+			"service": "http",
+			"product": "Metro Bundler (React Native)",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Expo",
+			"service": "http",
+			"product": "Expo Dev Server",
+			"confidence": 0.95
+		},
+		{
+			"pattern": "Vite/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Vite",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "vite",
+			"service": "http",
+			"product": "Vite",
+			"confidence": 0.85
+		},
+		{
+			"pattern": "webpack-dev-server/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Webpack Dev Server",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "webpack-dev-server",
+			"service": "http",
+			"product": "Webpack Dev Server",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Nuxt",
+			"service": "http",
+			"product": "Nuxt.js",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Next\\.js",
+			"service": "http",
+			"product": "Next.js",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "live-server",
+			"service": "http",
+			"product": "Live Server",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "http-server",
+			"service": "http",
+			"product": "http-server (Node.js)",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Flask/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Flask",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "Werkzeug/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Werkzeug (Flask/Python)",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "Django/(\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Django",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "gunicorn/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Gunicorn",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "uvicorn",
+			"service": "http",
+			"product": "Uvicorn (FastAPI/Python)",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Rails",
+			"service": "http",
+			"product": "Ruby on Rails",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "WEBrick/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "WEBrick (Ruby)",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "Puma/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Puma (Ruby)",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "express",
+			"service": "http",
+			"product": "Express.js",
+			"confidence": 0.85
+		},
+		{
+			"pattern": "Kestrel",
+			"service": "http",
+			"product": "Kestrel (.NET)",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "ASP\\.NET",
+			"service": "http",
+			"product": "ASP.NET",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Tomcat/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Apache Tomcat",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "Jetty/(\\d+\\.\\d+\\.\\d+)",
+			"service": "http",
+			"product": "Jetty",
+			"confidence": 0.95,
+			"version_group": 1
+		},
+		{
+			"pattern": "Caddy",
+			"service": "http",
+			"product": "Caddy Server",
+			"confidence": 0.9
+		},
+		{
+			"pattern": "Traefik",
+			"service": "http",
+			"product": "Traefik",
+			"confidence": 0.9
+		}
+	],
+	"port_hints": {
+		"22": "ssh",
+		"21": "ftp",
+		"25": "smtp",
+		"80": "http",
+		"110": "pop3",
+		"143": "imap",
+		"443": "https",
+		"465": "smtps",
+		"587": "smtp",
+		"993": "imaps",
+		"995": "pop3s",
+		"3000": "node-dev-server",
+		"3001": "react-dev-server",
+		"3306": "mysql",
+		"3389": "rdp",
+		"4200": "angular-dev-server",
+		"5173": "vite-dev-server",
+		"5174": "vite-dev-server",
+		"5432": "postgresql",
+		"5900": "vnc",
+		"6379": "redis",
+		"8000": "python-dev-server",
+		"8080": "http-alt",
+		"8081": "metro-bundler",
+		"8082": "metro-bundler",
+		"9000": "dev-server",
+		"19000": "expo-dev-server",
+		"19001": "expo-dev-server",
+		"19002": "expo-dev-server",
+		"27017": "mongodb"
+	}
 }
