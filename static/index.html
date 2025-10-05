@@ -33,6 +33,11 @@
 					</a>
 				</li>
 			</ul>
+			<div class="theme-toggle-container">
+				<button class="theme-toggle" onclick="toggleTheme()">
+					<span id="theme-text">Light Mode</span>
+				</button>
+			</div>
 		</nav>
 
 		<!-- Main Content -->
@@ -263,7 +268,8 @@
 						</li>
 						<li>
 							<strong>Confidence:</strong> How certain the
-							detection is (High: 80%+, Medium: 50-80%, Low: <50%)
+							detection is (High: 80%+, Medium: 50-80%, Low:
+							&lt;50%)
 						</li>
 					</ul>
 				</div>
@@ -271,6 +277,34 @@
 		</main>
 
 		<script>
+			// Initialize theme on page load
+			document.addEventListener("DOMContentLoaded", function () {
+				const currentTheme = localStorage.getItem("theme") || "dark";
+				const themeText = document.getElementById("theme-text");
+
+				if (currentTheme === "light") {
+					document.body.classList.add("light-mode");
+					themeText.textContent = "Dark Mode";
+				} else {
+					themeText.textContent = "Light Mode";
+				}
+			});
+
+			function toggleTheme() {
+				const body = document.body;
+				const themeText = document.getElementById("theme-text");
+
+				if (body.classList.contains("light-mode")) {
+					body.classList.remove("light-mode");
+					themeText.textContent = "Light Mode";
+					localStorage.setItem("theme", "dark");
+				} else {
+					body.classList.add("light-mode");
+					themeText.textContent = "Dark Mode";
+					localStorage.setItem("theme", "light");
+				}
+			}
+
 			function showPage(pageId) {
 				// Hide all pages
 				document.querySelectorAll(".page").forEach((page) => {
